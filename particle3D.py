@@ -4,9 +4,9 @@
  An instance describes a particle in Euclidean 3D space: 
  velocity and position are [3] arrays
 
- Includes time integrator methods +...
+ Includes time integrator methods + calculation methods + update methods
 
-author: ---------------
+Author: E Forster, s1639706
 
 """
 import math
@@ -24,8 +24,8 @@ class Particle3D(object):
     vel: velocity of the particle
 
         Methods:
-    __init__
-    __str__
+    __init__ - initialises a particle in 3D space
+    __str__ - sets up xyz of particle
     kinetic_e  - computes the kinetic energy
     momentum - computes the linear momentum
     update_pos - updates the position to 1st order
@@ -47,15 +47,20 @@ class Particle3D(object):
         :param position: [3] float array w/ position
         :param velocity: [3] float array w/ velocity
         """
-        CODE
+        self.label = label
+        self.mass = mass
+        self.position = position
+        self.velocity = velocity
 
 
     def __str__(self):
         """
         XYZ-compliant string. The format is
         <label>    <x>  <y>  <z>
+
+        :return xyz_string: (label, x, y, z)
         """
-        CODE
+        xyz_string = str(self.label + self.position[0] + self.position[1] + self.position[2])
         return xyz_string
 
 
@@ -65,66 +70,95 @@ class Particle3D(object):
 
         :return ke: float, 1/2 m v**2
         """
-        CODE
-        return ???
+        ke = (1/2) * self.mass * np.inner(self.velocity, self.velocity)
+        return ke
 
 
-    def momentum(_fill_in_the_blank_):
+    def momentum(self):
         """
-        FILL IN YOUR DOCSTRING COMMENT
+        Calculates and returns the momentum of a particle
+
+        :return p: returns momentum
         """
-        CODE
-        return ???
+        p = self.mass * self.velocity
+        return p
 
 
     def update_pos(self, dt):
         """
-        FILL IN YOUR DOCSTRING COMMENT
+        Calculates and updates the new position of a particle to 1st order
+
+        :param dt: time-step
         """
-        CODE
+        new_position = self.position + dt*self.velocity
 
 
-    def update_pos_2nd(_fill_in_the_blank_):
+    def update_pos_2nd(self, dt, force):
         """
-        FILL IN YOUR DOCSTRING COMMENT
+        Calculates and updates the position of a particle to 2nd order
+
+        :param dt: time-step
+        :param force: force on particle
         """
-        CODE
+        new_position = self.position + dt * self.velocity + (dt ** 2) * (force/(2 * self.mass))
 
 
-    def update_vel(_fill_in_the_blank_):
+    def update_vel(self, dt, force):
         """
-        FILL IN YOUR DOCSTRING COMMENT
+        Updates the velocity of a particle to 1st order
+
+        :param dt: time-step
+        :param force: force on particle
         """
-        CODE
+        new_velocity = self.velocity + dt * (force/self.mass)
 
 
     @staticmethod
-    def new_p3d(file_handle):
+    def new_p3d(input_file):
         """
         Initialises a Particle3D instance given an input file handle.
         
         The input file should contain one line per planet in the following format:
         label   <mass>  <x> <y> <z>    <vx> <vy> <vz>
         
-        :param inputFile: Readable file handle in the above format
+        :param input_file: Readable file handle in the above format
 
-        :return Particle3D instance
+        :return Particle3D: instance label mass position velocity
         """
-        CODE
-        return Particle3D()
+        data = input_file.readline()
+        lines = data.split()
+
+        label = str(lines[0])
+        mass = float(lines[1])
+        position = np.array(lines[2], lines[3], lines[4])
+        velocity = np.array(lines[5], lines[6], lines[7])
+
+        return Particle3D(label, mass, position, velocity)
 
 
     @staticmethod
     def sys_kinetic(p3d_list):
         """
-        FILL IN YOUR DOCSTRING COMMENT
+        Returns the total kinetic energy of the system as a float
+
+        :param p3d_list: list in which each item is a P3D instance
+
+        :return sys_ke: sum of each particle's kinetic energy
         """
-        CODE
+
+        sys_ke = 0
+
+        for particle in p3d_list:
+
+            ke = particle.kinetic_e()
+
+            sys_ke += ke
+
         return sys_ke
 
 
     @staticmethod
-    def com_velocity(_fill_in_the_blank_):
+    def com_velocity(p3d_list):
         """
         Computes the total mass and CoM velocity of a list of P3D's
 
@@ -132,7 +166,20 @@ class Particle3D(object):
         :return total_mass: The total mass of the system 
         :return com_vel: Centre-of-mass velocity
         """
-        CODE
+        total_mass = 0
+        com_vel = 0
+
+        for mass in p3d_list:
+
+            particle_mass = p3d_list([1])
+
+            total_mass += particle_mass(mass)
+
         return total_mass, com_vel
+
+
+
+
+
 
 

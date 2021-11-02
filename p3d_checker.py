@@ -44,8 +44,8 @@ force = np.ones(3)
 dx1 = 0.125 * np.array([1, -1, 0], float)
 
 # up1
-new_p3d.update_pos(dt)
-if np.allclose(dx1, new_p3d.pos):
+up1 = new_p3d.update_pos(dt)
+if np.allclose(dx1, up1):
     print("Position updater 1 check: ok")
 else:
     print("Position updater 1 check 1: ERROR")
@@ -56,8 +56,8 @@ new_p3d.pos = x0
 # Test the file handle creator
 with open('data_for_p3d') as f:
     f.readline()  # prune comment line
-    alice = p3d.new_particle(f)
-    bob = p3d.new_particle(f)
+    alice = p3d.new_p3d(f)
+    bob = p3d.new_p3d(f)
     p3d_list = [alice, bob]
 
 # And now we have a list of p3d's, check a static method...
