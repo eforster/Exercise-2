@@ -44,13 +44,13 @@ force = np.ones(3)
 dx1 = 0.125 * np.array([1, -1, 0], float)
 
 # up1
-up1 = new_p3d.update_pos(dt)
-if np.allclose(dx1, up1):
+new_p3d.update_pos(dt)
+if np.allclose(dx1, new_p3d.position):
     print("Position updater 1 check: ok")
 else:
     print("Position updater 1 check 1: ERROR")
     tests_failed += 1
-new_p3d.pos = x0
+new_p3d.position = x0
 
 
 # Test the file handle creator
@@ -74,4 +74,3 @@ print("\nChecking __str__. Your particle output is:\n{0:s}".format(str(alice)))
 print("\nIt should be similar to:\nAlice    0.0   0.0   0.0\n")
 
 print(f"Tests completed. There were {tests_failed} errors.")
-

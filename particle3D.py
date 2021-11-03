@@ -168,18 +168,18 @@ class Particle3D(object):
         """
         total_mass = 0
         com_vel = 0
+        total = 0
 
-        for mass in p3d_list:
+        for particle in p3d_list:
 
-            particle_mass = p3d_list([1])
+            particle_mass = particle.mass
+            total_mass += particle_mass
 
-            total_mass += particle_mass(mass)
+            particle_velocity = particle.velocity
+
+            mass_x_velocity = particle_mass * particle_velocity
+            total += mass_x_velocity
+
+            com_vel = total / total_mass
 
         return total_mass, com_vel
-
-
-
-
-
-
-
