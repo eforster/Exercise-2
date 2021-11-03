@@ -6,7 +6,7 @@
 
  Includes time integrator methods + calculation methods + update methods
 
-Author: E Forster, s1639706
+ Author: E Forster, s1639706
 
 """
 import math
@@ -35,7 +35,7 @@ class Particle3D(object):
         Static Methods:
     new_p3d - initializes a P3D instance from a file handle
     sys_kinetic - computes total K.E. of a p3d list
-    com_velocity - computes total mass and CoM velocity of a p3d list
+    com_vel - computes total mass and CoM velocity of a p3d list
     """
 
     def __init__(self, label, mass, pos, vel):
@@ -60,7 +60,7 @@ class Particle3D(object):
 
         :return xyz_string: (label, x, y, z)
         """
-        xyz_string = str(self.label + "    " + self.pos[0] + "    " + self.pos[1] + "    " + self.pos[2])
+        xyz_string = str(self.label + "    " + self.pos[0] + "   " + self.pos[1] + "   " + self.pos[2])
         return xyz_string
 
 
@@ -90,7 +90,7 @@ class Particle3D(object):
 
         :param dt: time-step
         """
-        new_position = self.pos + dt * self.vel
+        self.pos = self.pos + dt * self.vel
 
 
     def update_pos_2nd(self, dt, force):
@@ -100,7 +100,7 @@ class Particle3D(object):
         :param dt: time-step
         :param force: force on particle
         """
-        new_position = self.pos + dt * self.vel + (dt ** 2) * (force/(2 * self.mass))
+        self.pos = self.pos + dt * self.vel + (dt ** 2) * (force/(2 * self.mass))
 
 
     def update_vel(self, dt, force):
@@ -110,13 +110,13 @@ class Particle3D(object):
         :param dt: time-step
         :param force: force on particle
         """
-        new_velocity = self.vel + dt * (force/self.mass)
+        self.vel = self.vel + dt * (force/self.mass)
 
 
     @staticmethod
     def new_p3d(input_file):
         """
-        Initialises a Particle3D instance given an input file handle.
+        Initialises a Particle3D instance when given an input file handle.
         
         The input file should contain one line per planet in the following format:
         label   <mass>  <x> <y> <z>    <vx> <vy> <vz>
@@ -151,10 +151,9 @@ class Particle3D(object):
         for particle in p3d_list:
 
             ke = particle.kinetic_e()
-
             sys_ke += ke
 
-        return sys_ke
+        return float(sys_ke)
 
 
     @staticmethod
@@ -163,6 +162,7 @@ class Particle3D(object):
         Computes the total mass and CoM velocity of a list of P3D's
 
         :param p3d_list: list in which each item is a P3D instance
+
         :return total_mass: The total mass of the system 
         :return com_vel: Centre-of-mass velocity
         """
@@ -179,10 +179,8 @@ class Particle3D(object):
         for part in p3d_list :
 
             particle_vel = part.vel
-
             mass_x_vel = particle_mass * particle_vel
             total += mass_x_vel
-
             com_vel = total / total_mass
 
         return total_mass, com_vel
