@@ -45,12 +45,12 @@ dx1 = 0.125 * np.array([1, -1, 0], float)
 
 # up1
 new_p3d.update_pos(dt)
-if np.allclose(dx1, new_p3d.position):
+if np.allclose(dx1, new_p3d.pos):
     print("Position updater 1 check: ok")
 else:
     print("Position updater 1 check 1: ERROR")
     tests_failed += 1
-new_p3d.position = x0
+new_p3d.pos = x0
 
 
 # Test the file handle creator

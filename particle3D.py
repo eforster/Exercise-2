@@ -38,19 +38,19 @@ class Particle3D(object):
     com_velocity - computes total mass and CoM velocity of a p3d list
     """
 
-    def __init__(self, label, mass, position, velocity):
+    def __init__(self, label, mass, pos, vel):
         """
         Initialises a particle in 3D space
 
         :param label: String w/ the name of the particle
         :param mass: float, mass of the particle
-        :param position: [3] float array w/ position
-        :param velocity: [3] float array w/ velocity
+        :param pos: [3] float array w/ position
+        :param vel: [3] float array w/ velocity
         """
         self.label = label
         self.mass = mass
-        self.position = position
-        self.velocity = velocity
+        self.pos = pos
+        self.vel = vel
 
 
     def __str__(self):
@@ -60,7 +60,7 @@ class Particle3D(object):
 
         :return xyz_string: (label, x, y, z)
         """
-        xyz_string = str(self.label + self.position[0] + self.position[1] + self.position[2])
+        xyz_string = str(self.label + "    " + self.pos[0] + "    " + self.pos[1] + "    " + self.pos[2])
         return xyz_string
 
 
@@ -70,7 +70,7 @@ class Particle3D(object):
 
         :return ke: float, 1/2 m v**2
         """
-        ke = (1/2) * self.mass * np.inner(self.velocity, self.velocity)
+        ke = (1/2) * self.mass * (np.linalg.norm(self.vel) ** 2)
         return ke
 
 
@@ -80,7 +80,7 @@ class Particle3D(object):
 
         :return p: returns momentum
         """
-        p = self.mass * self.velocity
+        p = self.mass * self.vel
         return p
 
 
@@ -90,7 +90,7 @@ class Particle3D(object):
 
         :param dt: time-step
         """
-        new_position = self.position + dt*self.velocity
+        new_position = self.pos + dt * self.vel
 
 
     def update_pos_2nd(self, dt, force):
@@ -100,7 +100,7 @@ class Particle3D(object):
         :param dt: time-step
         :param force: force on particle
         """
-        new_position = self.position + dt * self.velocity + (dt ** 2) * (force/(2 * self.mass))
+        new_position = self.pos + dt * self.vel + (dt ** 2) * (force/(2 * self.mass))
 
 
     def update_vel(self, dt, force):
@@ -110,7 +110,7 @@ class Particle3D(object):
         :param dt: time-step
         :param force: force on particle
         """
-        new_velocity = self.velocity + dt * (force/self.mass)
+        new_velocity = self.vel + dt * (force/self.mass)
 
 
     @staticmethod
@@ -130,10 +130,10 @@ class Particle3D(object):
 
         label = str(lines[0])
         mass = float(lines[1])
-        position = np.array(lines[2], lines[3], lines[4])
-        velocity = np.array(lines[5], lines[6], lines[7])
+        pos = np.array([lines[2], lines[3], lines[4]])
+        vel = np.array([lines[5], lines[6], lines[7]])
 
-        return Particle3D(label, mass, position, velocity)
+        return Particle3D(label, mass, pos, vel)
 
 
     @staticmethod
@@ -175,10 +175,13 @@ class Particle3D(object):
             particle_mass = particle.mass
             total_mass += particle_mass
 
-            particle_velocity = particle.velocity
 
-            mass_x_velocity = particle_mass * particle_velocity
-            total += mass_x_velocity
+        for part in p3d_list :
+
+            particle_vel = part.vel
+
+            mass_x_vel = particle_mass * particle_vel
+            total += mass_x_vel
 
             com_vel = total / total_mass
 
