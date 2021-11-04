@@ -76,7 +76,7 @@ class Particle3D(object):
 
     def momentum(self):
         """
-        Calculates and returns the momentum of a particle
+        Calculates and returns the momentum of a Particle3D instance
 
         :return p: returns momentum
         """
@@ -86,7 +86,7 @@ class Particle3D(object):
 
     def update_pos(self, dt):
         """
-        Calculates and updates the new position of a particle to 1st order
+        Calculates and updates the new position of a Particle3D instance to 1st order
 
         :param dt: time-step
         """
@@ -95,7 +95,7 @@ class Particle3D(object):
 
     def update_pos_2nd(self, dt, force):
         """
-        Calculates and updates the position of a particle to 2nd order
+        Calculates and updates the position of a Particle3D instance to 2nd order
 
         :param dt: time-step
         :param force: force on particle
@@ -105,7 +105,7 @@ class Particle3D(object):
 
     def update_vel(self, dt, force):
         """
-        Updates the velocity of a particle to 1st order
+        Updates the velocity of a Particle3D instance to 1st order
 
         :param dt: time-step
         :param force: force on particle
@@ -125,15 +125,21 @@ class Particle3D(object):
 
         :return Particle3D: instance label mass position velocity
         """
-        data = input_file.readline()
-        lines = data.split()
+        try:
 
-        label = str(lines[0])
-        mass = float(lines[1])
-        pos = np.array([lines[2], lines[3], lines[4]])
-        vel = np.array([lines[5], lines[6], lines[7]])
+            data = input_file.readline()
+            lines = data.split()
 
-        return Particle3D(label, mass, pos, vel)
+            label = str(lines[0])
+            mass = float(lines[1])
+            pos = np.array([lines[2], lines[3], lines[4]])
+            vel = np.array([lines[5], lines[6], lines[7]])
+
+            return Particle3D(label, mass, pos, vel)
+
+        except IndexError:
+
+            print("Error: Incorrect file format.")
 
 
     @staticmethod
