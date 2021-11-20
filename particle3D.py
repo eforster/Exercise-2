@@ -60,7 +60,7 @@ class Particle3D(object):
 
         :return xyz_string: (label, x, y, z)
         """
-        xyz_string = str(self.label + "    " + self.pos[0] + "   " + self.pos[1] + "   " + self.pos[2])
+        xyz_string = str(self.label + "    " + str(self.pos[0]) + "   " + str(self.pos[1]) + "   " + str(self.pos[2]))
         return xyz_string
 
 
@@ -132,8 +132,16 @@ class Particle3D(object):
 
             label = str(lines[0])
             mass = float(lines[1])
-            pos = np.array([lines[2], lines[3], lines[4]])
-            vel = np.array([lines[5], lines[6], lines[7]])
+
+            x = float(lines[2])
+            y = float(lines[3])
+            z = float(lines[4])
+            pos = np.array([x, y, z])
+
+            v_x = float(lines[5])
+            v_y = float(lines[6])
+            v_z = float(lines[7])
+            vel = ([v_x, v_y, v_z])
 
             return Particle3D(label, mass, pos, vel)
 
